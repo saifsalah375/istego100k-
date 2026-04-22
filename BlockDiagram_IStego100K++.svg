@@ -1,0 +1,201 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" viewBox="0 0 680 340" role="img" style="font-family:'Times New Roman',serif;background:#fff;">
+<title>IStego100K++ Generation Framework — Block Diagram</title>
+<desc>Three-stage flowchart: generation pipeline (Row 1), embedding simulation (Row 2), adversarial training loop (Row 3)</desc>
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+  <marker id="arr-dash" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="#3B6D11" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- STAGE LABELS (left margin) -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<text x="8" y="58" text-anchor="middle" dominant-baseline="central"
+      font-size="9" fill="#888" transform="rotate(-90,8,58)">Stage 1</text>
+<text x="8" y="178" text-anchor="middle" dominant-baseline="central"
+      font-size="9" fill="#888" transform="rotate(-90,8,178)">Stage 2</text>
+<text x="8" y="292" text-anchor="middle" dominant-baseline="central"
+      font-size="9" fill="#888" transform="rotate(-90,8,292)">Stage 3</text>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- ROW 1 — Generation Forward Pass -->
+<!-- ═══════════════════════════════════════════════════════ -->
+
+<!-- Cover Image -->
+<g>
+  <rect x="20" y="28" width="100" height="56" rx="6"
+        fill="#F1EFE8" stroke="#888780" stroke-width="0.7"/>
+  <text x="70" y="50" text-anchor="middle" dominant-baseline="central"
+        font-size="11" font-weight="600" fill="#2C2C2A">Cover Image</text>
+  <text x="70" y="68" text-anchor="middle" dominant-baseline="central"
+        font-size="9.5" fill="#5F5E5A">1024×1024 RGB</text>
+</g>
+
+<!-- Pre-processing -->
+<g>
+  <rect x="138" y="28" width="108" height="56" rx="6"
+        fill="#F1EFE8" stroke="#888780" stroke-width="0.7"/>
+  <text x="192" y="50" text-anchor="middle" dominant-baseline="central"
+        font-size="11" font-weight="600" fill="#2C2C2A">Pre-processing</text>
+  <text x="192" y="68" text-anchor="middle" dominant-baseline="central"
+        font-size="9.5" fill="#5F5E5A">Norm. · Resize · ToTensor</text>
+</g>
+
+<!-- Generator G -->
+<g>
+  <rect x="264" y="28" width="100" height="56" rx="6"
+        fill="#EEEDFE" stroke="#534AB7" stroke-width="0.7"/>
+  <text x="314" y="50" text-anchor="middle" dominant-baseline="central"
+        font-size="11" font-weight="600" fill="#26215C">Generator G</text>
+  <text x="314" y="68" text-anchor="middle" dominant-baseline="central"
+        font-size="9.5" fill="#3C3489">U-Net  8↓ + 7↑</text>
+</g>
+
+<!-- Probability Map p -->
+<g>
+  <rect x="382" y="28" width="118" height="56" rx="6"
+        fill="#FAEEDA" stroke="#BA7517" stroke-width="0.7"/>
+  <text x="441" y="50" text-anchor="middle" dominant-baseline="central"
+        font-size="11" font-weight="600" fill="#412402">Prob Map  p</text>
+  <text x="441" y="68" text-anchor="middle" dominant-baseline="central"
+        font-size="9.5" fill="#633806">p ∈ [0, 0.5]</text>
+</g>
+
+<!-- Row 1 horizontal arrows -->
+<line x1="120" y1="56" x2="136" y2="56" stroke="#444441" stroke-width="1.2" marker-end="url(#arr)"/>
+<line x1="246" y1="56" x2="262" y2="56" stroke="#444441" stroke-width="1.2" marker-end="url(#arr)"/>
+<line x1="364" y1="56" x2="380" y2="56" stroke="#444441" stroke-width="1.2" marker-end="url(#arr)"/>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- ROW 2 — Embedding Simulation -->
+<!-- ═══════════════════════════════════════════════════════ -->
+
+<!-- Noise n -->
+<g>
+  <rect x="20" y="148" width="100" height="56" rx="6"
+        fill="#F1EFE8" stroke="#888780" stroke-width="0.7"/>
+  <text x="70" y="170" text-anchor="middle" dominant-baseline="central"
+        font-size="11" font-weight="600" fill="#2C2C2A">Noise  n</text>
+  <text x="70" y="188" text-anchor="middle" dominant-baseline="central"
+        font-size="9.5" fill="#5F5E5A">Uniform[0, 1]</text>
+</g>
+
+<!-- Embedding Simulator -->
+<g>
+  <rect x="138" y="148" width="125" height="56" rx="6"
+        fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.7"/>
+  <text x="200" y="167" text-anchor="middle" dominant-baseline="central"
+        font-size="11" font-weight="600" fill="#04342C">Emb. Simulator</text>
+  <text x="200" y="183" text-anchor="middle" dominant-baseline="central"
+        font-size="9.5" fill="#085041">Double-Tanh  λ=60</text>
+</g>
+
+<!-- Stego x_s -->
+<g>
+  <rect x="281" y="148" width="108" height="56" rx="6"
+        fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.7"/>
+  <text x="335" y="167" text-anchor="middle" dominant-baseline="central"
+        font-size="11" font-weight="600" fill="#04342C">Stego  x_s</text>
+  <text x="335" y="183" text-anchor="middle" dominant-baseline="central"
+        font-size="9.5" fill="#085041">→ JPEG  (QF rand.)</text>
+</g>
+
+<!-- CSV Report -->
+<g>
+  <rect x="407" y="148" width="108" height="56" rx="6"
+        fill="#F1EFE8" stroke="#888780" stroke-width="0.7"/>
+  <text x="461" y="167" text-anchor="middle" dominant-baseline="central"
+        font-size="11" font-weight="600" fill="#2C2C2A">CSV Report</text>
+  <text x="461" y="183" text-anchor="middle" dominant-baseline="central"
+        font-size="9.5" fill="#5F5E5A">PSNR · SSIM · QF · PL</text>
+</g>
+
+<!-- Row 2 horizontal arrows -->
+<line x1="120" y1="176" x2="136" y2="176" stroke="#444441" stroke-width="1.2" marker-end="url(#arr)"/>
+<line x1="263" y1="176" x2="279" y2="176" stroke="#444441" stroke-width="1.2" marker-end="url(#arr)"/>
+<line x1="389" y1="176" x2="405" y2="176" stroke="#444441" stroke-width="1.2" marker-end="url(#arr)"/>
+
+<!-- Prob Map → Emb. Sim (cross-row L-path) -->
+<path d="M 441 84 L 441 118 L 200 118 L 200 148"
+      fill="none" stroke="#BA7517" stroke-width="1.2" marker-end="url(#arr)"/>
+<!-- small "p" label -->
+<text x="448" y="103" font-size="9.5" fill="#BA7517" font-style="italic">p</text>
+<!-- small "n" label -->
+<text x="126" y="172" font-size="9.5" fill="#5F5E5A" font-style="italic">n</text>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- ROW 3 — Adversarial Training Loop -->
+<!-- ═══════════════════════════════════════════════════════ -->
+
+<!-- Discriminator D -->
+<g>
+  <rect x="80" y="262" width="140" height="56" rx="6"
+        fill="#E6F1FB" stroke="#185FA5" stroke-width="0.7"/>
+  <text x="150" y="281" text-anchor="middle" dominant-baseline="central"
+        font-size="11" font-weight="600" fill="#042C53">Discriminator  D</text>
+  <text x="150" y="299" text-anchor="middle" dominant-baseline="central"
+        font-size="9.5" fill="#0C447C">SRM-CNN  → Logits[2]</text>
+</g>
+
+<!-- Loss_D -->
+<g>
+  <rect x="238" y="262" width="100" height="56" rx="6"
+        fill="#FCEBEB" stroke="#A32D2D" stroke-width="0.7"/>
+  <text x="288" y="281" text-anchor="middle" dominant-baseline="central"
+        font-size="11" font-weight="600" fill="#501313">Loss_D</text>
+  <text x="288" y="299" text-anchor="middle" dominant-baseline="central"
+        font-size="9.5" fill="#791F1F">CE Loss</text>
+</g>
+
+<!-- Loss_G -->
+<g>
+  <rect x="356" y="262" width="130" height="56" rx="6"
+        fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.7"/>
+  <text x="421" y="281" text-anchor="middle" dominant-baseline="central"
+        font-size="11" font-weight="600" fill="#173404">Loss_G</text>
+  <text x="421" y="299" text-anchor="middle" dominant-baseline="central"
+        font-size="9.5" fill="#27500A">GAN + Entropy</text>
+</g>
+
+<!-- Row 3 horizontal arrows -->
+<line x1="220" y1="290" x2="236" y2="290" stroke="#444441" stroke-width="1.2" marker-end="url(#arr)"/>
+<line x1="338" y1="290" x2="354" y2="290" stroke="#444441" stroke-width="1.2" marker-end="url(#arr)"/>
+
+<!-- Cover → Discriminator (downward L-path) -->
+<path d="M 70 84 L 70 240 L 150 240 L 150 262"
+      fill="none" stroke="#888780" stroke-width="1.1" stroke-dasharray="4 2.5" marker-end="url(#arr)"/>
+
+<!-- Stego → Discriminator (downward L-path) -->
+<path d="M 335 204 L 335 240 L 150 240 L 150 262"
+      fill="none" stroke="#0F6E56" stroke-width="1.1" stroke-dasharray="4 2.5" marker-end="url(#arr)"/>
+
+<!-- Feedback: Loss_G → Generator G (right-side loop, dashed green) -->
+<path d="M 486 290 L 516 290 L 516 10 L 314 10 L 314 28"
+      fill="none" stroke="#3B6D11" stroke-width="1.2" stroke-dasharray="5 3"
+      marker-end="url(#arr-dash)"/>
+<!-- backprop label -->
+<text x="519" y="155" text-anchor="start" font-size="9" fill="#3B6D11"
+      font-style="italic">∇G</text>
+<text x="519" y="165" text-anchor="start" font-size="9" fill="#3B6D11"
+      font-style="italic">back</text>
+<text x="519" y="175" text-anchor="start" font-size="9" fill="#3B6D11"
+      font-style="italic">prop</text>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- ARROW LABELS on cross-connections -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<text x="59" y="193" text-anchor="end" font-size="8.5" fill="#888">cover</text>
+<text x="346" y="222" text-anchor="middle" font-size="8.5" fill="#0F6E56">stego</text>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- FIGURE CAPTION -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<line x1="20" y1="328" x2="660" y2="328" stroke="#D3D1C7" stroke-width="0.5"/>
+<text x="340" y="337" text-anchor="middle" font-size="9" fill="#888780"
+      font-style="italic">
+  Fig. 1.  Block diagram of the proposed IStego100K++ dataset generation framework.
+</text>
+</svg>
