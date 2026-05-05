@@ -9,6 +9,7 @@
 ---
 
 ## Overview
+IStego100K++ consists of 200,142 images (100,071 cover + 100,071 stego)
 IStego100K++ is generated using a pre-trained UT-GAN generator
 applied to 100,071 cover images from IStego100K at 1024×1024
 resolution, with random payload rates (0.1–0.5 bpp) and JPEG
